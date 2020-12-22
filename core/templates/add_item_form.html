@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter new expenses{% endblock %}
+
+{% block body %}
+
+    <h3>{{ label }}</h3>
+
+    {% load crispy_forms_tags %}
+    <form action="." method="POST"  class="uniForm">
+        {% csrf_token %}
+        <table>
+			{{ form|crispy }}
+		    {% csrf_token %}
+        </table>
+        <input type="submit" class="btn btn-primary" value="Отправить">
+    </form>
+
+    {% if items %}
+    <h3 class="h_to_center">Существующие записи в базе:</h3>
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Имя:</th>    
+        </tr>
+        </thead>
+        <tbody>            
+            {% for item in items %}
+                 <tr><td>{{ item.name }}</td></tr>
+            {% endfor %}
+        </tbody>        
+    {% endif %}
+{% endblock %}

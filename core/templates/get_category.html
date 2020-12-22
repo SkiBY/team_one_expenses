@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{label}}:{% endblock %}
+
+{% block body %}
+    <h1 class="h_to_center">{{label}}:</h1>
+    <h3 class="h_to_center">Категории:</h3>
+    {% if items.category %}
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Имя:</th>
+               </tr>
+        </thead>
+        <tbody>
+        {% for item in items.category %}
+        <tr>
+            <td>{{ item.name }}</td>
+
+            <td><a class="btn btn-danger btn-sm active link-for-delete" name="delete_item" role="button" aria-pressed="true" href="{% if prefix  == 'income' %}{% url 'delete_income_category' item.id %}{% else %}{% url 'delete_expenses_category' item.id %}{% endif %}" >Удалить</a></td>
+
+        </tr>
+        {% endfor %}
+        </table>
+        </tbody>
+    {% else %}
+        <h4 class="h_to_center">Увы список пуст!</h4>     
+    {% endif %}    
+
+    <h3 class="h_to_center">Подкатегории:</h3>  
+    {% if items.subcategory %}
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Имя:</th>
+            <th>Категории:</th>
+            <th>Описание:</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items.subcategory %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.parent }}</td>
+            <td>{{ item.describe}}</td>
+            <td><a class="btn btn-danger btn-sm active link-for-delete" name="delete_item" role="button" aria-pressed="true" href="{% if prefix  == 'income' %}{% url 'delete_income_sub_category' item.id %}{% else %}{% url 'delete_expenses_category' item.id %}{% endif %}" >Удалить</a></td>
+
+        </tr>
+        {% endfor %}
+        </table>
+        </tbody>
+         <p onclick="show_links_for_delete()" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"  href="">Редактировать</p>
+    {% else %}
+        <h4 class="h_to_center">Увы список пуст!</h4>     
+    {% endif %}
+  
+  
+{% endblock %}
