@@ -81,7 +81,7 @@ class Expenses(IncomeExpensesBase):
     ''' Модель для описания всех списаний средст '''    
     category = models.ForeignKey(ExpensesSubCategory, on_delete=models.CASCADE)
 
-class OnlineBalance(models.Model):
-    amount = models.DecimalField(max_digits = 10, decimal_places=2, verbose_name='amount')
-    account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True,)
-    datetime = models.DateTimeField(auto_now_add=True, verbose_name='datetime')
+# class OnlineBalance(models.Model):
+#     amount = models.DecimalField(max_digits = 10, decimal_places=2, verbose_name='amount')
+#     account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True,)
+#     datetime = models.DateTimeField(auto_now_add=True, verbose_name='datetime')

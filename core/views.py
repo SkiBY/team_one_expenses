@@ -122,10 +122,18 @@ def add_currency(request):
         items = models.Currency.objects.all()
         return render(request, 'add_item_form.html', {'form': form,'label':label, 'items':items})
 
+def get_currency_data(request):
+    return models.Currency.objects.all()
+
+
+def get_currency_name_with_code(id):
+    currency = models.Currency.get(pk=id)
+    return currency.name+currency.code
+
 
 def get_currency(request):
     label = 'Список доступных валют'
-    items = models.Currency.objects.all()
+    items = get_currency_date()
     return render(request, 'get_currency.html', {'items':items,'label':label})
 
 def delete_currency(request, currency_id):
@@ -367,23 +375,18 @@ def get_expenses(request):
     label = 'Список списания средств'
     return render(request, 'get_income.html', {'items':items,'label':label})
 
+def get_full_data(request):
+    from itertools import chain
+    items_income = models.Income.objects.all().order_by('datetime').annotate(type_of = Value('+', output_field=CharField()))
+    items_expenses = models.Expenses.objects.all().order_by('datetime').annotate(type_of = Value('-', output_field=CharField()))
+    items = sorted(
+        chain(items_income, items_expenses),
+        key=lambda item: item.datetime, reverse=True)
+    return items
+
 def get_full(request):
-    from itertools import chain
-    items_income = models.Income.objects.all().order_by('datetime').annotate(type_of = Value('+', output_field=CharField()))
-    items_expenses = models.Expenses.objects.all().order_by('datetime').annotate(type_of = Value('-', output_field=CharField()))
-    items = sorted(
-        chain(items_income, items_expenses),
-        key=lambda item: item.datetime, reverse=True)
+    items = get_full_data()
     label = 'Список всех движений средст'
     return render(request, 'get_income.html', {'items':items,'label':label}) 
 
 
-def get_full___(request, account):
-    from itertools import chain
-    items_income = models.Income.objects.all().order_by('datetime').annotate(type_of = Value('+', output_field=CharField()))
-    items_expenses = models.Expenses.objects.all().order_by('datetime').annotate(type_of = Value('-', output_field=CharField()))
-    items = sorted(
-        chain(items_income, items_expenses),
-        key=lambda item: item.datetime, reverse=True)
-    label = 'Список всех движений средст'
-    return render(request, 'get_income.html', {'items':items,'label':label}) 
