@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ label }}:{% endblock %}
+
+{% block body %}
+    <h1 class="h_to_center">{{ label }}</h1>
+    {% if item.info %}
+    	<h3>Название счета: {{ item.info.name }}</h3>
+        <h3>Валюта: {{ item.info.currency}}</h3>
+        <h3>Дата добавления: {{ item.info.datetime}}</h3>
+        <h3>Сумма на счету: {{ item.total}} (начальный баланс {{ item.info.amount}})</h3>
+        <a class="btn btn-primary btn-lg active" role="button" aria-pressed="true"  href="{% url 'add_income' %}">Положить на счет</a>            
+        <a class="btn btn-primary btn-lg active" role="button" aria-pressed="true"  href="{% url 'add_expenses' %}">Списать с cчета</a>            
+        <a class="btn btn-primary btn-lg active" role="button" aria-pressed="true"  href="{% url 'account_to_pdf_export' item.info.id %}">Экспорт в PDF</a>            
+        <a onclick="show_links_for_delete()" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Редактировать</a>      
+        <a class="btn btn-danger btn-lg active" role="button" aria-pressed="true"  href="{% url 'delete_account' item.info.id %}">Удалить счет</a>            
+    {% endif %}
+    {% if item.data %}  
+        <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Название счета:</th>
+            <th>Категория:</th>
+            <th>Дата добавления:</th>
+            <th>Сумма:</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data_item in item.data %}
+        <tr>
+            <td>{{ data_item.account }}</td>
+            <td>{{ data_item.category}}</td>
+            <td>{{ data_item.datetime}}</td>
+            <td>
+            {% if data_item.type_of %}
+                {% if data_item.type_of == '+' %}
+                    <span style="color: green">
+                {% else %}
+                    <span style="color: red">
+                {% endif %}
+                {{ data_item.type_of}}{{ data_item.amount}}</span>
+            {% else %}
+                {{ data_item.type_of}}{{ data_item.amount}}
+            {% endif %}
+            </td>
+            {% if data_item.prefix %}
+                {% if data_item.prefix == 'income' %}
+                <td><a class="btn btn-danger btn-sm active link-for-delete" role="button" aria-pressed="true" name="delete_item" href="{% url 'delete_income' data_item.id %}">Удалить</a></td>
+                {% endif %}
+                {% if data_item.prefix == 'expenses' %}
+                <td><a class="btn btn-danger btn-sm active link-for-delete" role="button" aria-pressed="true" name="delete_item" href="{% url 'delete_expenses' data_item.id %}">Удалить</a></td>
+                {% endif %}
+                
+            {% endif %}
+        </tr>
+        {% endfor %}
+        
+        </tbody>
+        <tfoot>
+            <td></td>
+            <td></td>
+            <td>Итого:</td>
+            <td>{{ item.total}}</td>            
+        </tfoot>
+        </table>
+    {% endif %}
+
+{% endblock %}
