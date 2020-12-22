@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import OnlineBalance, Currency, IncomeCategory, ExpensesCategory, IncomeSubCategory, ExpensesSubCategory, Account, Income, Expenses
-
-admin.site.register(OnlineBalance)
+from .models import  Currency, IncomeCategory, ExpensesCategory, IncomeSubCategory, ExpensesSubCategory, Account, Income, Expenses
+# OnlineBalance,
+# admin.site.register(OnlineBalance)
 admin.site.register(Currency)
 admin.site.register(IncomeCategory)
 admin.site.register(ExpensesCategory)
